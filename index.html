@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=750, user-scalable=no">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-title" content="">
+<title>支持PC、移动端上下滑动翻页</title>
+<style>
+*{ margin:0px; padding:0px; box-sizing:border-box; -webkit-tap-highlight-color:rgba(0,0,0,0);}
+html{ width:640px; margin:0 auto;}
+body{ font-family:"PingFangSC-Regular","sans-serif","STHeitiSC-Light","微软雅黑","Microsoft YaHei"; font-size:28px; line-height:1.6; color:#212121;
+    -webkit-user-select:none; user-select:none;
+    -webkit-touch-callout:none; touch-callout:none;
+}
+html , body{ width:640px; height:1040px; position:relative; overflow:hidden;}
+ 
+/***************************/
+.page_box{width:640px; height:1040px;position:relative; overflow:hidden;}
+.page{ width:640px; height:1040px; position:absolute; left:0; top:0; overflow:hidden;
+	 display:flex; flex-direction: column; justify-content:center; align-items:center;
+}
+.page.hide{ display:none;}
+ 
+.page.inTop{
+	-webkit-animation:ShowTop .5s ease-out both;
+					animation:ShowTop .5s ease-out both;
+}
+.page.outTop{
+	-webkit-animation:HideTop .5s ease-out both;
+					animation:HideTop .5s ease-out both;
+}
+.page.inDown{
+	-webkit-animation:ShowDown .5s ease-out both;
+					animation:ShowDown .5s ease-out both;
+}
+.page.outDown{
+	-webkit-animation:HideDown .5s ease-out both;
+					animation:HideDown .5s ease-out both;
+}
+@-webkit-keyframes ShowTop{
+	0%{ -webkit-transform:translateY(100%);}
+	100%{ -webkit-transform:translateY(0);}
+}
+@keyframes ShowTop{
+	0%{ transform:translateY(100%);}
+	100%{ transform:translateY(0);}
+}
+@-webkit-keyframes HideTop{
+	0%{ -webkit-transform:translateY(0);}
+	100%{ -webkit-transform:translateY(-100%);}
+}
+@keyframes HideTop{
+	0%{ transform:translateY(0);}
+	100%{ transform:translateY(-100%);}
+}
+@-webkit-keyframes ShowDown{
+	0%{ -webkit-transform:translateY(-100%);}
+	100%{ -webkit-transform:translateY(0);}
+}
+@keyframes ShowDown{
+	0%{ transform:translateY(-100%);}
+	100%{ transform:translateY(0);}
+}
+@-webkit-keyframes HideDown{
+	0%{ -webkit-transform:translateY(0);}
+	100%{ -webkit-transform:translateY(100%);}
+}
+@keyframes HideDown{
+	0%{ transform:translateY(0);}
+	100%{ transform:translateY(100%);}
+}
+ 
+.arrow{ width:60px; height:52px; color: #f00; font-size: 36px; position:absolute; left:50%; margin-left: -30px; top:600px;
+	-webkit-animation:fadeIn .5s 1s ease-in-out both;
+					animation:fadeIn .5s 1s ease-in-out both;
+}
+.arrow.hide{ display:none;}
+.arrow div:first-child , .arrow div:last-child{ display: flex; justify-content: center; align-items: center; width:60px; height: 40px; position:absolute; left:0;
+	-webkit-transform-origin:center top;
+					transform-origin:center top;
+}
+.arrow div:first-child{ top:0;
+	-webkit-animation:arrow .8s .5s ease-in-out infinite alternate;
+					animation:arrow .8s .5s ease-in-out infinite alternate;
+}
+.arrow div:last-child{ top:12px;
+	-webkit-animation:arrow .8s .8s ease-in-out infinite alternate;
+					animation:arrow .8s .8s ease-in-out infinite alternate;
+}
+@-webkit-keyframes arrow{
+	100%{ -webkit-transform:translateY(-50%); opacity:1;}
+	0%{ -webkit-transform:translateY(0); opacity:0;}
+}
+@keyframes arrow{
+	100%{ transform:translateY(-50%); opacity:1;}
+	0%{ transform:translateY(0); opacity:0;}
+}
+/***************************/
+ 
+@-webkit-keyframes fadeInMinToMax{
+	0%{ -webkit-transform:scale(0); opacity:0;}
+	100%{ -webkit-transform:scale(1); opacity:1;}
+}
+@keyframes fadeInMinToMax{
+	0%{ transform:scale(0); opacity:0;}
+	100%{ transform:scale(1); opacity:1;}
+}
+.page{ font-size: 40px; }
+
+.page1 .scroll_box{ width:640px; height:1040px; margin: 0 auto; overflow-y:auto; -webkit-overflow-scrolling:touch;
+	-webkit-animation:fadeInMinToMax 1.5s .4s ease-out both;
+					animation:fadeInMinToMax 1.5s .4s ease-out both;
+}
+.page2 .scroll_box{ width:640px; height:1040px;text-align: center; overflow-y: auto; -webkit-overflow-scrolling: touch;}
+.page2 .scroll_box > div{ padding: 50px 0 80px 0;}
+.page3 .scroll_box{width:640px; height:1040px;text-align: center; overflow-y: auto; -webkit-overflow-scrolling: touch;}
+.page3 .scroll_box > div{ padding: 50px 0 80px 0;}
+</style>
+		  <style>
+		 
+
+
+@keyframes FlyOne {
+  10% {
+    transform: translateX(7vw) translateY(-10vh) rotate(0deg);
+  }
+  40% {
+    transform: translateX(2vw) translateY(-30vh) rotate(5deg);
+  }
+  70% {
+    transform: translateX(10vw) translateY(-70vh) rotate(-5deg);
+  }
+  100% {
+    transform: translateX(3vw) translateY(-120vh) rotate(3deg);
+	}
+}
+
+@keyframes FlyTwo {
+  10% {
+    transform: translateX(2vw) translateY(-15vh) rotate(0deg);
+  }
+  40% {
+    transform: translateX(10vw) translateY(-60vh) rotate(5deg);
+  }
+  70% {
+    transform: translateX(3vw) translateY(-90vh) rotate(-5deg);
+  }
+  100% {
+    transform: translateX(12vw) translateY(-100vh) rotate(3deg);
+    opacity: 0.1;
+	}
+}
+
+@keyframes FlyThree {
+  10% {
+    transform: translateX(5vw) translateY(-20vh) rotate(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: translateX(1vw) translateY(-50vh) rotate(5deg);
+    opacity: 0.8;
+  }
+  70% {
+    transform: translateX(7vw) translateY(-80vh) rotate(-5deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(14vw) translateY(-100vh) rotate(3deg);
+    opacity: 0.1;
+	}
+}
+
+@keyframes FlyFour {
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0.1;
+	}
+}
+
+@keyframes Wink {
+  100% {
+    width: 0;
+	}
+}
+
+.mid-autumn-body {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%);
+  width: 35vw;
+  height: 100vh;
+  background: linear-gradient(-180deg, rgba(4,16,57,1.00),rgba(65,140,188,1.00),#fff);
+	background-color:#418cbc;
+  overflow: hidden;
+}
+
+.moon {
+  position: absolute;
+  border-radius: 100%;
+  width: 10vw;
+  height: 10vw;
+  background: radial-gradient(#fffee8, #fdfe8e, #faf193);
+  box-shadow: 0 0 40px 20px #fff;
+  left: 1vw;
+  top: 1vw;
+}
+
+.moon-shadow {
+  width: 4vw;
+  height: 7vw;
+  border-radius: 100%;
+  position: absolute;
+  top: 1vw;
+  left: 4.7vw;
+  /* background: linear-gradient(51deg, #f0c519, #fbee4f, #fefebe); */
+  background: linear-gradient(51deg, #f8de2b, #f5d633, #fdf956, #feff7f, #fefec6);
+}
+
+#moonShadow {
+  filter: url(#filter);
+}
+
+.kongming-latern, .kongming-latern-litle {
+  position: absolute;
+  height: 5.1vw;
+  width: 3.5vw;
+  bottom: -8vw;
+  background: linear-gradient(#92090e, #ea3d2d, #fbf885);
+  animation: FlyOne 22s linear infinite;
+}
+
+.latern-left {
+  border-left: 5vw solid transparent;
+  border-right: 1vw solid transparent;
+  border-bottom: 0.9vw solid #ea4c35;
+  transform: rotate(-90deg);
+  position: relative;
+  top: 2.5vw;
+  left: -3.4vw;
+}
+
+.latern-right {
+  border-left: 1vw solid transparent;
+  border-right: 5vw solid transparent;
+  border-bottom: 0.9vw solid #ea4c35;
+  transform: rotate(90deg);
+  position: relative;
+  top: 1.6vw;
+  left: 0.9vw;
+}
+
+.latern-bottom {
+  position: relative;
+  top: 3vw;
+  width: 3.5vw;
+  height: 1.2vw;
+  background: radial-gradient(#fff, #fbf885, #ea3d2d);
+  border-radius: 2vw;
+}
+
+.kongming-latern {
+  z-index: 2;
+}
+
+.kongming-latern:nth-child(2), .kongming-latern:nth-child(3) {
+  animation: FlyThree 18s linear infinite;
+  animation-delay: 6s;
+  height: 3.7vw;
+  left: 5vw;
+  width: 2.5vw;
+  bottom: -10vw;
+}
+
+.kongming-latern:nth-child(2) {
+  bottom: -7vw;
+  left: 2vw;
+  animation: FlyTwo 15s linear infinite;
+  animation-delay: 2s;
+}
+
+.kongming-latern:nth-child(2) .latern-left, .kongming-latern:nth-child(3) .latern-left {
+  border-left: 3vw solid transparent;
+  top: 1.5vw;
+  left: -2.4vw;
+}
+
+.kongming-latern:nth-child(2) .latern-right, .kongming-latern:nth-child(3) .latern-right {
+  border-right: 3vw solid transparent;
+  top: 0.6vw;
+  left: 0.9vw;
+}
+
+.kongming-latern:nth-child(2) .latern-bottom, .kongming-latern:nth-child(3) .latern-bottom {
+  top: 1.6vw;
+  height: 1vw;
+  width: 2.5vw;
+}
+
+.kongming-latern-litle {
+  height: 2vw;
+  left: 5vw;
+  width: 1.2vw;
+  bottom: 5vw;
+  animation: FlyFour 15s linear infinite;
+}
+
+.kongming-latern-litle .latern-left {
+  border-left: 1.7vw solid transparent;
+  border-right: 0.3vw solid transparent;
+  border-bottom: 0.5vw solid #ea4c35;
+  top: 0.75vw;
+  left: -1.2vw;
+}
+
+.kongming-latern-litle .latern-right {
+  border-left: 0.3vw solid transparent;
+  border-right: 1.7vw solid transparent;
+  border-bottom: 0.5vw solid #ea4c35;
+  top: 0.26vw;
+  left: 0.4vw;
+}
+
+.kongming-latern-litle .latern-bottom {
+  top: 0.6vw;
+  width: 1.2vw;
+  height: 0.5vw;
+}
+
+.star {
+  position: absolute;
+  height: 0.1vw;
+  width: 0.1vw;
+  border-radius: 1vw;
+  background: #fff;
+}
+
+.top-roof {
+  position: absolute;
+  bottom: 6vw;
+  right: 0;
+  border-left: 10vw solid transparent;
+  border-right: 0vw solid transparent;
+  border-bottom: 4vw solid #2b2a49;
+}
+
+.top-roof:before {
+  content: '';
+  border-bottom: 0.7vw solid #2b2a49;
+  width: 11vw;
+  height: 5vw;
+  position: absolute;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+  transform: rotate(-23deg) translate(0.7vw, -3vw);
+  right: -0.2vw;
+  /* top: 0.8vw; */
+}
+
+.top-roof:after {
+  content: '';
+  width: 10vw;
+  height: 2vw;
+  background: linear-gradient(#23314e, #657297, transparent);
+  position: absolute;
+  right: 0;
+  top: 4vw;
+  border-bottom-left-radius: 3vw;
+}
+
+.tile {
+  position: absolute;
+  width: 0.6vw;
+  height: 1.5vw;
+  background: linear-gradient(90deg, #f7fcff, #667396, #2b2a49);
+  right: 0;
+  border-radius: 0.2vw;
+  transform: rotate(45deg) translate(-4vw, 8vw);
+}
+
+.edge {
+  position: absolute;
+  right: 9vw;
+  width: 0.7vw;
+  height: 0.4vw;
+  background: #f7fcff;
+  border-radius: 50%;
+  top: 4vw;
+  z-index: 1;
+}
+
+.roof-body {
+  position: absolute;
+  top: 5vw;
+  right: 0;
+  width: 8vw;
+  height: 3vw;
+  background: linear-gradient(#a6a9c2, #f7fcff);
+}
+
+.bottom-roof {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.bottom-roof .tile {
+  transform: rotate(45deg) translate(0vw, -4.5vw);
+  height: 4vw;
+  width: 0.7vw;
+}
+	  </style>
+</head>
+ 
+<body>
+<div class="page_box">
+	<div class="page page1" id="page1">
+		<div class="page1_body scroll_box">
+			
+				  <div class="mid-autumn-body" id="midAutumn">
+      <div class="sky" id="sky">
+        <div class="moon">
+          <div class="moon-shadow" id="moonShadow"></div>
+          <svg width="0" height="0">
+            <filter id="filter">
+              <feTurbulence type="fractalNoise" baseFrequency="0.034" numOctaves="4" seed="0" />
+              <feDisplacementMap in="SourceGraphic" scale="150" />
+            </filter>
+          </svg>
+        </div>
+      </div>
+      <div class="latern" id="latern">
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+		  <div style="font-size: 15px;color: aliceblue;top: 180px;left: 20px; position: absolute">
+		  <p>《月下独酌》</p>
+
+　　<p>唐·李白</p>
+
+　　<p>花间一壶酒，独酌无相亲。</p>
+　　<p>举杯邀明月，对影成三人。</p>
+　　<p>月既不解饮，影徒随我身。</p>
+　　<p>暂伴月将影，行乐须及春。</p>
+　　<p>我歌月徘徊，我舞影零乱</p>
+		  </div>
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+        <div class="kongming-latern-litle">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+      </div>
+      <div class="house" id="house">
+		  <img src="./img/1.png" style="width: 150px;position: absolute;left: 330px;opacity: 0.4">
+        <div class="top-roof" id="topRoof">
+          <div class="tile"></div>
+          <div class="edge"></div>
+          <div class="roof-body"></div>
+        </div>
+        <div class="bottom-roof" id="bottomRoof">
+        </div>
+      </div>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="page page2 hide" id="page2">
+
+		<div class="page1_body scroll_box">
+			
+				  <div class="mid-autumn-body" id="midAutumn">
+      <div class="sky" id="sky">
+        <div class="moon">
+          <div class="moon-shadow" id="moonShadow"></div>
+          <svg width="0" height="0">
+            <filter id="filter">
+              <feTurbulence type="fractalNoise" baseFrequency="0.034" numOctaves="4" seed="0" />
+              <feDisplacementMap in="SourceGraphic" scale="150" />
+            </filter>
+          </svg>
+        </div>
+      </div>
+      <div class="latern" id="latern">
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+		  <div style="font-size: 15px;color: aliceblue;top: 180px;left: 20px; position: absolute">
+		  <p>《中秋月》</p>
+
+　　<p>宋·晏殊</p>
+
+　　<p>十轮霜影转庭梧，此夕羁人独向隅。</p>
+　　<p>未必素娥无怅恨，玉蟾清冷桂花孤！</p>
+　　
+　
+		  </div>
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+        <div class="kongming-latern-litle">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+      </div>
+      <div class="house" id="house">
+		   <img src="./img/img2.jpg" style="width: 150px;position: absolute;left: 330px;opacity: 0.4">
+        <div class="top-roof" id="topRoof">
+          <div class="tile"></div>
+          <div class="edge"></div>
+          <div class="roof-body"></div>
+        </div>
+        <div class="bottom-roof" id="bottomRoof">
+        </div>
+      </div>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="page page3 hide" id="page3">
+
+		<div class="page1_body scroll_box">
+			
+			
+				  <div class="mid-autumn-body" id="midAutumn">
+      <div class="sky" id="sky">
+        <div class="moon">
+          <div class="moon-shadow" id="moonShadow"></div>
+          <svg width="0" height="0">
+            <filter id="filter">
+              <feTurbulence type="fractalNoise" baseFrequency="0.034" numOctaves="4" seed="0" />
+              <feDisplacementMap in="SourceGraphic" scale="150" />
+            </filter>
+          </svg>
+        </div>
+      </div>
+      <div class="latern" id="latern">
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+		  <div style="font-size: 15px;color: aliceblue;top: 180px;left: 20px; position: absolute">
+		  <p>《望月怀远》</p>
+
+
+　　<p>　唐·张九龄</p>
+
+　　<p>海上生明月，天涯共此时。</p>
+　　<p>情人怨遥夜，竟夕起相思！</p>
+　　<p>灭烛怜光满，披衣觉露滋。</p>
+　　<p>不堪盈手赠，还寝梦佳期。</p>
+　　
+		  </div>
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+        <div class="kongming-latern">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+        <div class="kongming-latern-litle">
+          <div class="latern-left"></div>
+          <div class="latern-right"></div>
+          <div class="latern-bottom"></div>
+        </div>
+      </div>
+      <div class="house" id="house">
+		   <img src="./img/img2.jpg" style="width: 150px;position: absolute;left: 330px;opacity: 0.4">
+        <div class="top-roof" id="topRoof">
+          <div class="tile"></div>
+          <div class="edge"></div>
+          <div class="roof-body"></div>
+        </div>
+        <div class="bottom-roof" id="bottomRoof">
+        </div>
+      </div>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="arrow" id="button1">
+		<div>
+			<svg class="icon" style="width: 1em;height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2859"><path d="M491.42 412.298c7.887 12.378 6.427 28.995-4.381 39.803L204.196 734.944l-90.51-90.51c-12.496-12.497-12.496-32.758 0-45.255L396.53 316.337l0.265 0.265 89.974-89.975c12.497-12.496 32.758-12.496 45.255 0l395.98 395.98-90.51 90.51c-12.497 12.497-32.758 12.497-45.255 0L491.42 412.297z" p-id="2860"></path></svg>
+		</div>
+		<div>
+			<svg class="icon" style="width: 1em;height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2859"><path d="M491.42 412.298c7.887 12.378 6.427 28.995-4.381 39.803L204.196 734.944l-90.51-90.51c-12.496-12.497-12.496-32.758 0-45.255L396.53 316.337l0.265 0.265 89.974-89.975c12.497-12.496 32.758-12.496 45.255 0l395.98 395.98-90.51 90.51c-12.497 12.497-32.758 12.497-45.255 0L491.42 412.297z" p-id="2860"></path></svg>
+		</div>
+	</div>
+</div>
+	<script src="./js/jquery.1.9.min.js"></script>
+   <script >  
+           window.onload = function() {
+
+var x = 0;
+function a(x){
+	if(x==1){
+				   document.getElementById("page1").style.display="block"
+			   }else if(x==2){
+				   document.getElementById("page2").style.display="block"
+			   }else  if(x==3){
+				   document.getElementById("page3").style.display="block"
+			   }
+}
+//单击事件
+
+$("#button1").click(function() {
+
+x=x+1;
+	if(x<=3){
+		a(x);
+
+	}else if(x>3){
+				  x = 0;
+				   x=x+1;
+		if(x==1){
+			document.getElementById("page3").style.display="none";
+			document.getElementById("page2").style.display="none";
+				   document.getElementById("page1").style.display="block"
+			   }else if(x==2){
+				   document.getElementById("page2").style.display="block"
+			   }else  if(x==3){
+				   document.getElementById("page3").style.display="block"
+			   }
+		
+			   }
+		  
+});
+//双击事件
+
+$("#button1").dblclick(function() {
+
+//alert("双击事件");
+
+x = 0;
+
+
+
+})
+
+}
+        </script>
+<script type="text/javascript">
+	
+function setChangePage(element,isLoop,needScrollClass){
+
+	var pageData = {
+		curPage:1,
+		prevPage:null,
+		PageL:element.querySelectorAll('.page').length,
+		type:null,
+		canTouch:true,
+		startY:0,
+		endY:0,
+		diff:0,
+	}
+	var startEvt,moveEvt,endEvt;
+	if("ontouchstart" in window){
+		// 移动端用户滑动事件
+		startEvt = "touchstart";
+		moveEvt = "touchmove";
+		endEvt = "touchend";
+	}else{
+		// PC端鼠标移动事件
+		startEvt = "mousedown";
+		moveEvt = "mousemove";
+		endEvt = "mouseup";
+	}
+	element.addEventListener(startEvt, touchStart, false);
+	element.addEventListener(moveEvt, touchMove, false);
+	element.addEventListener(endEvt, touchEnd, false);
+	function touchStart(e){
+		pageData.startY = startEvt == "touchstart" ? e.touches[0].pageY : e.pageY;
+		pageData.endY = '';
+		pageData.diff = '';
+	}  
+	function touchMove(e){
+		e.preventDefault();
+		pageData.endY = startEvt == "touchstart" ? e.touches[0].pageY : e.pageY;
+		pageData.diff = pageData.endY - pageData.startY;
+	}
+	function touchEnd(e){
+		if(Math.abs(pageData.diff) > 150 && pageData.canTouch){
+			changeDoBefore(pageData.diff);
+		}
+		// setTimeout(function(){
+			pageData.startY = '';
+			pageData.endY = '';
+			pageData.diff = '';
+		// },500);
+	}
+	function changeDoBefore(diffNum){
+		if(diffNum > 0){
+			// 向下滑动进入前一页
+			pageData.type = 2;
+			if(pageData.curPage <= 1){
+				if(isLoop){
+					pageData.prevPage = 1;
+					pageData.curPage = pageData.PageL;
+					changeDo();
+				}
+			}else{
+				pageData.prevPage = pageData.curPage;
+				pageData.curPage--;
+				changeDo();
+			}
+		}else{
+			// 向上滑动进入下一页
+			pageData.type = 1;
+			if(pageData.curPage >= pageData.PageL){
+				if(isLoop){
+					pageData.prevPage = pageData.PageL;
+					pageData.curPage = 1;
+					changeDo();
+				}
+			}else{
+				pageData.prevPage = pageData.curPage;
+				pageData.curPage++;
+				changeDo();
+			}
+		}
+	}
+	
+	function changeDo(){
+		if(pageData.type == 1){
+			element.querySelector('.page' + pageData.prevPage).classList.remove('inTop' , 'outTop' , 'inDown' , 'outDown' , 'hide');
+			element.querySelector('.page' + pageData.prevPage).classList.add('outTop');
+			element.querySelector('.page' + pageData.curPage).classList.remove('inTop' , 'outTop' , 'inDown' , 'outDown' , 'hide');
+			element.querySelector('.page' + pageData.curPage).classList.add('inTop');
+		}else if(pageData.type == 2){
+			element.querySelector('.page' + pageData.prevPage).classList.remove('inTop' , 'outTop' , 'inDown' , 'outDown' , 'hide');
+			element.querySelector('.page' + pageData.prevPage).classList.add('outDown');
+			element.querySelector('.page' + pageData.curPage).classList.remove('inTop' , 'outTop' , 'inDown' , 'outDown' , 'hide');
+			element.querySelector('.page' + pageData.curPage).classList.add('inDown');
+		}
+ 
+		if(needScrollClass && startEvt == "touchstart"){
+			scrollEleData.canTouch = false;
+			setTimeout(function(){
+				scrollEleData.canTouch = true;
+			},500);
+		}
+ 
+		pageData.canTouch = false;
+		setTimeout(function(){
+			pageData.canTouch = true;
+			element.querySelector('.page' + pageData.prevPage).classList.add('hide');
+		},500);
+		// 不循环切换时设置最后一页时隐藏向上箭头
+		if(pageData.curPage >= pageData.PageL){
+			if(!isLoop){
+				element.querySelector('.arrow').classList.add('hide');
+			}
+		}else{
+			if(!isLoop){
+				element.querySelector('.arrow').classList.remove('hide');
+			}
+		}
+		// 执行翻页页面内部可滚动时，设置进入页面后滚动条位置
+		if(needScrollClass && element.querySelector('.page' + pageData.curPage).querySelector('.' + needScrollClass)){
+			element.querySelector('.page' + pageData.curPage).querySelector('.' + needScrollClass).scrollTop = 0;
+		}
+	}
+	
+	// 执行翻页页面内部可滚动（移动端需要）
+	if(needScrollClass && startEvt == "touchstart"){
+		var scrollEleData = {
+			canTouch:true,
+			startY:0,
+			endY:0,
+			diff:0,
+		}
+		// console.log(element.querySelectorAll('.' + needScrollClass).length);
+		element.querySelectorAll('.' + needScrollClass).forEach(function(item,index){
+			// console.log(item,index);
+			item.addEventListener("touchstart", scrollEleTouchStart, false);
+			item.addEventListener("touchmove", scrollEleTouchMove, false);
+			item.addEventListener("touchend", scrollEleTouchEnd, false);
+			function scrollEleTouchStart(e){
+				// e.stopPropagation();
+				element.removeEventListener("touchmove", touchMove, false);
+				scrollEleData.startY = e.touches[0].pageY;
+				scrollEleData.endY = '';
+				scrollEleData.diff = '';
+			}  
+			function scrollEleTouchMove(e){
+				scrollEleData.endY = e.touches[0].pageY;
+				scrollEleData.diff = scrollEleData.endY - scrollEleData.startY;
+			}
+			function scrollEleTouchEnd(e){
+				element.addEventListener("touchmove", touchMove, false);
+				// console.log(scrollEleData.canTouch);
+				if(Math.abs(scrollEleData.diff) > 150 && scrollEleData.canTouch){
+					changeDoBefore(scrollEleData.diff);
+				}
+				// setTimeout(function(){
+					scrollEleData.startY = '';
+					scrollEleData.endY = '';
+					scrollEleData.diff = '';
+				// },500);
+			}
+			item.addEventListener("scroll", scrollDo, false);
+			function scrollDo(e){
+				// console.log(e.target.clientHeight , e.target.scrollTop , e.target.scrollHeight);
+				if((e.target.clientHeight + e.target.scrollTop + 2 >= e.target.scrollHeight) || (e.target.scrollTop == 0)){
+					setTimeout(function(){
+						scrollEleData.canTouch = true;
+					},500);
+				}else{
+					scrollEleData.canTouch = false;
+				}
+			}
+		})
+	}
+}
+ 
+/***************************/
+ 
+// 例：
+// 循环执行翻页
+setChangePage(document.getElementsByClassName('page_box')[0],'loop','scroll_box');
+// 不循环执行翻页
+// setChangePage(document.getElementsByClassName('page_box')[0],'','scroll_box');
+ 
+</script>
+</body>
+</html>
